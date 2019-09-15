@@ -1,0 +1,46 @@
+- pipeline: "Build and Test"
+  trigger_mode: "ON_EVERY_PUSH"
+  ref_name: "master"
+  ref_type: "BRANCH"
+  trigger_condition: "ALWAYS"
+  actions:
+  - action: "Execute: pytest"
+    type: "BUILD"
+    working_directory: "/buddy/unmarc-server"
+    docker_image_name: "library/python"
+    docker_image_tag: "3.7.4-alpine"
+    execute_commands:
+    - "pip install -r requirements/local.txt"
+    - "pytest"
+    setup_commands:
+    - "apk update \\"
+    - "  # psycopg2 dependencies"
+    - "  && apk add --virtual build-deps gcc python3-dev musl-dev \\"
+    - "  && apk add postgresql-dev \\"
+    - "  # Pillow dependencies"
+    - "  && apk add jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev \\"
+    - "  # CFFI dependencies"
+    - "  && apk add libffi-dev py-cffi \\"
+    - "  && apk add bash"
+    services:
+    - type: "POSTGRE_SQL"
+      version: "11.5"
+      connection:
+        host: "postgres"
+        port: 5432
+        user: "unmarc"
+        db: "unmarc"
+    cached_dirs:
+    - "/root/.cache/pip"
+    mount_filesystem_path: "/buddy/unmarc-server"
+    shell: "BASH"
+    trigger_condition: "ALWAYS"
+    variables:
+    - id: 211443
+      key: "DATABASE_URL"
+      value: "postgresql://unmarc:@postgres/unmarc"
+      description: ""
+    - id: 211444
+      key: "DJANGO_SETTINGS_MODULE"
+      value: "unmarc.settings.test"
+      description: ""

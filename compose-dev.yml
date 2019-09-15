@@ -1,0 +1,29 @@
+version: '3.7'
+
+volumes:
+  postgres_data_dev: {}
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: compose/dev/Dockerfile
+    image: unmarc_django_dev
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+    env_file:
+      - .envs/dev/django
+      - .envs/dev/postgres
+    ports:
+      - "8000:8000"
+    command: python manage.py runserver_plus 0.0.0.0:8000
+    restart: on-failure:10
+
+  postgres:
+    image: postgres:11.5-alpine
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+    env_file:
+      - .envs/dev/postgres

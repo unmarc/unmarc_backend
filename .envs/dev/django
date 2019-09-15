@@ -1,0 +1,4 @@
+USE_DOCKER=yes
+IPYTHONDIR=/app/.ipython
+DJANGO_SETTINGS_MODULE=unmarc.settings.local
+DATABASE_URL=postgresql://unmarc:@postgres/unmarc

@@ -40,6 +40,7 @@ APPEND_SLASH = True
 
 WSGI_APPLICATION = "unmarc.wsgi.application"
 
+# --------------------------------------------------------
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -53,9 +54,12 @@ THIRD_PARTY_APPS = []
 
 UNMARC_APPS = [
     'users.apps.UsersConfig',
+    'library.apps.LibraryConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + UNMARC_APPS
+# -------------------------------------------------------------/
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -67,9 +71,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# AUTH
-# ----
 
+# AUTH
+# --------------------------------------------------------
 AUTH_USER_MODEL = 'users.User'
 
 PASSWORD_HASHERS = [
@@ -96,7 +100,18 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+# ---------------------------------------------------------/
 
+
+# Security
+# --------------------------------
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = "DENY"
+# --------------------------------/
+
+# ----------------------------------------------------------
 STATIC_ROOT = str(ROOT_DIR("staticfiles"))
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [str(APPS_DIR.path("static"))]
@@ -107,6 +122,8 @@ STATICFILES_FINDERS = [
 
 MEDIA_ROOT = str(APPS_DIR("media"))
 MEDIA_URL = "/media/"
+# ------------------------------------------------------------/
+
 
 TEMPLATES = [
     {
@@ -149,11 +166,3 @@ LOGGING = {
     },
     "root": {"level": "INFO", "handlers": ["console"]},
 }
-
-
-# Security
-# --------
-SESSION_COOKIE_HTTPONLY = True
-CSRF_COOKIE_HTTPONLY = True
-SECURE_BROWSER_XSS_FILTER = True
-X_FRAME_OPTIONS = "DENY"

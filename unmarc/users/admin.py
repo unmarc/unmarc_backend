@@ -14,7 +14,10 @@ from django.utils.html import escape
 from django.utils.translation import gettext, gettext_lazy as _
 
 from .adminforms import UserChangeForm, UserCreationForm
-from .models import User
+from .models import User, Staff
+
+
+admin.site.register(Staff)
 
 
 @admin.register(User)

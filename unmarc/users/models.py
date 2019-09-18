@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.mail import send_mail
@@ -70,10 +71,20 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
+    def __str__(self):
+        return self.username + (f' ({self.name})' if self.name else '')
+
     @property
     def is_staff(self):
-        """THIS IS A HACK TO PLAY NICELY WITH ADMIN"""
+        """
+        THIS IS A HACK TO PLAY NICELY WITH ADMIN. DO NOT USE.
+        For library staff, use "is_library_staff" property
+        """
         return True if self.is_superuser else False
+
+    @property
+    def is_library_staff(self):
+        return True if hasattr(self, 'staff') else False
 
     def clean(self):
         super().clean()
@@ -82,3 +93,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+
+class Staff(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    branches = models.ManyToManyField('library.Branch', related_name='staff')
+
+    class Meta:
+        verbose_name_plural = 'Staff'
+
+    def __str__(self):
+        return self.user.name or self.user.username

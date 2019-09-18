@@ -6,7 +6,7 @@
   actions:
   - action: "Execute: pytest"
     type: "BUILD"
-    working_directory: "/buddy/unmarc-server"
+    working_directory: "/buddy/unmarc-backend"
     docker_image_name: "library/python"
     docker_image_tag: "3.7.4-alpine"
     execute_commands:
@@ -32,7 +32,7 @@
         db: "unmarc"
     cached_dirs:
     - "/root/.cache/pip"
-    mount_filesystem_path: "/buddy/unmarc-server"
+    mount_filesystem_path: "/buddy/unmarc-backend"
     shell: "BASH"
     trigger_condition: "ALWAYS"
     variables:
@@ -43,4 +43,8 @@
     - id: 211444
       key: "DJANGO_SETTINGS_MODULE"
       value: "unmarc.settings.test"
+      description: ""
+    - id: 213250
+      key: "PYTHONPATH"
+      value: "$PYTHONPATH:./unmarc"
       description: ""

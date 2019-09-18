@@ -2,10 +2,16 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+import environ
 
 
 def main():
+    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+    ENV_FILE = os.path.join(ROOT_DIR, '.env')
+    if os.path.exists(ENV_FILE):
+        environ.Env().read_env(ENV_FILE)
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'unmarc.settings.base')
+    sys.path.append(os.path.join(ROOT_DIR, 'unmarc'))
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

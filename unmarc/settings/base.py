@@ -17,10 +17,7 @@ APPS_DIR = ROOT_DIR.path("unmarc")
 
 env = environ.Env()
 
-READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
-if READ_DOT_ENV_FILE:
-    # OS environment variables take precedence over variables from .env
-    env.read_env(str(ROOT_DIR.path(".env")))
+env.read_env(str(ROOT_DIR.path(".env")))
 
 
 # General
@@ -54,7 +51,9 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = []
 
-UNMARC_APPS = []
+UNMARC_APPS = [
+    'users.apps.UsersConfig',
+]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + UNMARC_APPS
 
@@ -68,8 +67,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Passwords
-# ---------
+# AUTH
+# ----
+
+AUTH_USER_MODEL = 'users.User'
+
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.Argon2PasswordHasher',
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
@@ -83,6 +85,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 6
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',

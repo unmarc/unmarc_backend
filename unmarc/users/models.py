@@ -80,11 +80,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         THIS IS A HACK TO PLAY NICELY WITH ADMIN. DO NOT USE.
         For library staff, use "is_library_staff" property
         """
-        return True if self.is_superuser else False
+        return bool(self.is_superuser)
 
     @property
     def is_library_staff(self):
-        return True if hasattr(self, 'staff') else False
+        return hasattr(self, 'staff')
 
     def clean(self):
         super().clean()
@@ -96,8 +96,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Staff(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    branches = models.ManyToManyField('library.Branch', related_name='staff')
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    branches = models.ManyToManyField(
+        'library.Branch',
+        related_name='staff'
+    )
 
     class Meta:
         verbose_name_plural = 'Staff'

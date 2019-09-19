@@ -53,8 +53,8 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = []
 
 UNMARC_APPS = [
-    'users',
-    'library',
+    'users.apps.UsersConfig',
+    'library.apps.LibraryConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + UNMARC_APPS

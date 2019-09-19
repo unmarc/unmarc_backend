@@ -65,12 +65,12 @@ class UserAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         return [
-                   path(
-                       '<id>/password/',
-                       self.admin_site.admin_view(self.user_change_password),
-                       name='auth_user_password_change',
-                   ),
-               ] + super().get_urls()
+            path(
+                '<id>/password/',
+                self.admin_site.admin_view(self.user_change_password),
+                name='auth_user_password_change',
+            ),
+        ] + super().get_urls()
 
     def lookup_allowed(self, lookup, value):
         # Don't allow lookups involving passwords.
@@ -110,14 +110,14 @@ class UserAdmin(admin.ModelAdmin):
         return super().add_view(request, form_url, extra_context)
 
     @sensitive_post_parameters_m
-    def user_change_password(self, request, id, form_url=''):
-        user = self.get_object(request, unquote(id))
+    def user_change_password(self, request, user_id, form_url=''):
+        user = self.get_object(request, unquote(user_id))
         if not self.has_change_permission(request, user):
             raise PermissionDenied
         if user is None:
             raise Http404(_('%(name)s object with primary key %(key)r does not exist.') % {
                 'name': self.model._meta.verbose_name,
-                'key': escape(id),
+                'key': escape(user_id),
             })
         if request.method == 'POST':
             form = self.change_password_form(user, request.POST)

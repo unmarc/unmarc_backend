@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
+from datetime import timedelta
 import environ
 
 ROOT_DIR = (environ.Path(__file__) - 3)  # (unmarc_backend/unmarc/settings/base.py - 3 = unmarc_backend/)
@@ -50,7 +50,10 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
 ]
 
-THIRD_PARTY_APPS = []
+THIRD_PARTY_APPS = [
+    'graphene_django',
+    'graphql_jwt.refresh_token.apps.RefreshTokenConfig',
+]
 
 UNMARC_APPS = [
     'users.apps.UsersConfig',
@@ -100,13 +103,18 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'graphql_jwt.backends.JSONWebTokenBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 # ---------------------------------------------------------/
 
 
 # Security
 # --------------------------------
 SESSION_COOKIE_HTTPONLY = True
-CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = 'Strict'
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = "DENY"
 # --------------------------------/
@@ -165,4 +173,20 @@ LOGGING = {
         }
     },
     "root": {"level": "INFO", "handlers": ["console"]},
+}
+
+# GraphQL
+# --------------------------------
+GRAPHENE = {
+    'SCHEMA': 'unmarc.schema.schema',
+    'MIDDLEWARE': [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    ]
+}
+
+GRAPHQL_JWT = {
+    'JWT_VERIFY_EXPIRATION': True,
+    'JWT_LONG_RUNNING_REFRESH_TOKEN': True,
+    'JWT_EXPIRATION_DELTA': timedelta(minutes=1),
+    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(minutes=5),
 }

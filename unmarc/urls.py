@@ -15,17 +15,30 @@ Including another URLconf
 """
 from django.conf import settings
 from django.contrib import admin
-from django.urls import path, include
 from django.http import HttpResponse
+from django.urls import path, include
+from django.views.decorators.csrf import ensure_csrf_cookie
+from graphene_django.views import GraphQLView
 
 
 def index(_):
     return HttpResponse('Hello World')
 
 
+@ensure_csrf_cookie
+def set_csrf_cookie(_):
+    """
+    Call this before any GraphQL queries to set CSRF cookie
+    on the browser else all queries will fail
+    """
+    return HttpResponse('')
+
+
 urlpatterns = [
     path('', index),
+    path('_h', set_csrf_cookie),
     path('admin/', admin.site.urls),
+    path("graphql", GraphQLView.as_view(graphiql=True)),
 ]
 
 if settings.DEBUG and "debug_toolbar" in settings.INSTALLED_APPS:

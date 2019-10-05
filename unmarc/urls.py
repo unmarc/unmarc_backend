@@ -19,6 +19,9 @@ from django.http import HttpResponse
 from django.urls import path, include
 from django.views.decorators.csrf import ensure_csrf_cookie
 from graphene_django.views import GraphQLView
+from .public_schema import schema as public_schema
+from .private_schema import schema as private_schema
+from common.views import StaffGraphQLView
 
 
 def index(_):
@@ -38,7 +41,8 @@ urlpatterns = [
     path('', index),
     path('_h', set_csrf_cookie),
     path('admin/', admin.site.urls),
-    path("graphql", GraphQLView.as_view(graphiql=True)),
+    path('gql-pub', GraphQLView.as_view(schema=public_schema, graphiql=True)),
+    path('gql-pvt', StaffGraphQLView.as_view(schema=private_schema, graphiql=False)),
 ]
 
 if settings.DEBUG and "debug_toolbar" in settings.INSTALLED_APPS:

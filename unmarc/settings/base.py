@@ -178,7 +178,6 @@ LOGGING = {
 # GraphQL
 # --------------------------------
 GRAPHENE = {
-    'SCHEMA': 'unmarc.schema.schema',
     'MIDDLEWARE': [
         'graphql_jwt.middleware.JSONWebTokenMiddleware',
     ]

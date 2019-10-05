@@ -1,12 +1,6 @@
 import graphene
 import graphql_jwt
 
-import users.schema
-
-
-class Query(users.schema.Query, graphene.ObjectType):
-    pass
-
 
 class Mutation(graphene.ObjectType):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
@@ -15,4 +9,4 @@ class Mutation(graphene.ObjectType):
     revoke_token = graphql_jwt.Revoke.Field()
 
 
-schema = graphene.Schema(query=Query, mutation=Mutation)
+schema = graphene.Schema(mutation=Mutation)

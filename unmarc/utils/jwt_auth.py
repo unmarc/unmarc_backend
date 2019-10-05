@@ -47,14 +47,6 @@ class JSONWebTokenAuthMixin(object):
     `JWT_AUTH_HEADER_PREFIX`. For example:
         Authorization: JWT eyJhbGciOiAiSFMyNTYiLCAidHlwIj
     """
-    def __init__(self, user_role, authorization_error_msg=None, *args, **kwargs):
-        """
-        :param user_role: e.g. is_library_staff or is_supervisor etc.
-        """
-        self.user_role = user_role
-        self.authorization_error_msg = authorization_error_msg or "User doesn't have required permissions"
-        super().__init__(*args, **kwargs)
-
     def dispatch(self, request, *args, **kwargs):
         try:
             request.user, request.token = self.authenticate(request)
@@ -101,7 +93,8 @@ class JSONWebTokenAuthMixin(object):
             raise AuthenticationFailed(msg)
 
         user = self.authenticate_credentials(payload)
-        self.check_authorization(user)
+        if hasattr(self, 'check_authorization'):
+            self.check_authorization(user)
 
         return user, auth[1]
 
@@ -123,7 +116,3 @@ class JSONWebTokenAuthMixin(object):
             raise AuthenticationFailed(msg)
 
         return user
-
-    def check_authorization(self, user):
-        if not getattr(user, self.user_role):
-            raise PermissionDenied(self.authorization_error_msg)

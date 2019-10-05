@@ -42,7 +42,7 @@ urlpatterns = [
     path('_h', set_csrf_cookie),
     path('admin/', admin.site.urls),
     path('gql-pub', GraphQLView.as_view(schema=public_schema, graphiql=True)),
-    path('gql-pvt', StaffGraphQLView.as_view(schema=private_schema, graphiql=False)),
+    path('gql-pvt', StaffGraphQLView.as_view(schema=private_schema)),
 ]
 
 if settings.DEBUG and "debug_toolbar" in settings.INSTALLED_APPS:

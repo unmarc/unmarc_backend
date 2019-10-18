@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-from datetime import timedelta
 import environ
 
 ROOT_DIR = (environ.Path(__file__) - 3)  # (unmarc_backend/unmarc/settings/base.py - 3 = unmarc_backend/)
@@ -105,7 +104,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'graphql_jwt.backends.JSONWebTokenBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 # ---------------------------------------------------------/
@@ -173,19 +171,4 @@ LOGGING = {
         }
     },
     "root": {"level": "INFO", "handlers": ["console"]},
-}
-
-# GraphQL
-# --------------------------------
-GRAPHENE = {
-    'MIDDLEWARE': [
-        'graphql_jwt.middleware.JSONWebTokenMiddleware',
-    ]
-}
-
-GRAPHQL_JWT = {
-    'JWT_VERIFY_EXPIRATION': True,
-    'JWT_LONG_RUNNING_REFRESH_TOKEN': True,
-    'JWT_EXPIRATION_DELTA': timedelta(minutes=1),
-    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(minutes=5),
 }

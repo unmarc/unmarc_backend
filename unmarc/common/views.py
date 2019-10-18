@@ -1,10 +1,16 @@
 from django.core.exceptions import PermissionDenied
+from django.http import JsonResponse
 from graphene_django.views import GraphQLView
 
-from utils.jwt_auth import JSONWebTokenAuthMixin
+from users.mixins import LoginRequiredMixin, IsLibraryStaffMixin
 
 
-class StaffGraphQLView(JSONWebTokenAuthMixin, GraphQLView):
-    def check_authorization(self, user):
-        if not getattr(user, 'is_library_staff'):
-            raise PermissionDenied("Only library staff allowed")
+class StaffGraphQLView(LoginRequiredMixin, IsLibraryStaffMixin, GraphQLView):
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except PermissionDenied as e:
+            return JsonResponse(
+                data={'errors': [{"message": str(e)}]},
+                status=403
+            )

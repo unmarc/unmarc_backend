@@ -19,9 +19,11 @@ from django.http import HttpResponse
 from django.urls import path, include
 from django.views.decorators.csrf import ensure_csrf_cookie
 from graphene_django.views import GraphQLView
+
 from .public_schema import schema as public_schema
 from .private_schema import schema as private_schema
 from common.views import StaffGraphQLView
+from users import views as users_views
 
 
 def index(_):
@@ -34,15 +36,17 @@ def set_csrf_cookie(_):
     Call this before any GraphQL queries to set CSRF cookie
     on the browser else all queries will fail
     """
-    return HttpResponse('')
+    return HttpResponse()
 
 
 urlpatterns = [
     path('', index),
-    path('_h', set_csrf_cookie),
+    path('_h/', set_csrf_cookie),
     path('admin/', admin.site.urls),
-    path('gql-pub', GraphQLView.as_view(schema=public_schema, graphiql=True)),
-    path('gql-pvt', StaffGraphQLView.as_view(schema=private_schema)),
+    path('login/', users_views.login),
+    path('logout/', users_views.logout),
+    path('gql-pub/', GraphQLView.as_view(schema=public_schema, graphiql=True)),
+    path('gql-pvt/', StaffGraphQLView.as_view(schema=private_schema, graphiql=True)),
 ]
 
 if settings.DEBUG and "debug_toolbar" in settings.INSTALLED_APPS:

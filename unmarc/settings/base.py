@@ -51,7 +51,6 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'graphene_django',
-    'graphql_jwt.refresh_token.apps.RefreshTokenConfig',
 ]
 
 UNMARC_APPS = [

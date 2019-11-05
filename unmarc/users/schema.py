@@ -8,6 +8,11 @@ class UserType(DjangoObjectType):
     class Meta:
         model = get_user_model()
 
+    is_library_staff = graphene.Boolean()
+
+    def resolve_is_library_staff(self, info):
+        return info.context.user.is_library_staff
+
 
 class Query(graphene.ObjectType):
     me = graphene.Field(UserType)

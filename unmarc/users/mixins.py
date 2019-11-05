@@ -14,4 +14,4 @@ class IsLibraryStaffMixin(UserPassesTestMixin):
         raise PermissionDenied('Insufficient permissions')
 
     def test_func(self):
-        return self.request.user.is_library_staff
+        return self.request.user.is_library_staff or self.request.user.is_superuser

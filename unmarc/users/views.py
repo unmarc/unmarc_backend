@@ -3,7 +3,7 @@ from django.contrib.auth import (
     login as auth_login,
     logout as auth_logout
 )
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.views.decorators.http import require_POST
 
 
@@ -27,3 +27,7 @@ def login(request):
 def logout(request):
     auth_logout(request)
     return HttpResponse()
+
+
+def auth_status(request):
+    return JsonResponse({'userIsLoggedIn': request.user.is_authenticated})

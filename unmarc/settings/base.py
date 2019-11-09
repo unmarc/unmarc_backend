@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
+import os
+
 import environ
 
 ROOT_DIR = (environ.Path(__file__) - 3)  # (unmarc_backend/unmarc/settings/base.py - 3 = unmarc_backend/)
@@ -16,8 +18,8 @@ APPS_DIR = ROOT_DIR.path("unmarc")
 
 env = environ.Env()
 
-env.read_env(str(ROOT_DIR.path(".env")))
-
+if env("USE_DOCKER", default="no") == "no" and os.path.exists(ROOT_DIR.path('.env')):
+    env.read_env(str(ROOT_DIR.path('.env')))
 
 # General
 DEBUG = env.bool("DJANGO_DEBUG", False)

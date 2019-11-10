@@ -102,7 +102,8 @@ class Staff(models.Model):
     )
     branches = models.ManyToManyField(
         'library.Branch',
-        related_name='staff'
+        related_name='staff',
+        blank=True
     )
 
     class Meta:

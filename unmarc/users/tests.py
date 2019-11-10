@@ -1,4 +1,6 @@
 from django.test import TestCase
+from django.contrib.auth.models import Group
+from django.conf import settings
 
 from users.models import User, Staff
 
@@ -14,3 +16,8 @@ class UserModelTest(TestCase):
 
     def test_staff_user_has_is_library_staff_property_true(self):
         self.assertTrue(self.staff_user.is_library_staff)
+
+
+class GroupTest(TestCase):
+    def test_library_admin_group_exists(self):
+        self.assertTrue(Group.objects.filter(name__exact=settings.LIBRARY_ADMIN_GROUP_NAME).exists())

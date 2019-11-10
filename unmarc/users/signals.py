@@ -1,16 +1,18 @@
-from django.conf import settings
 from django.contrib.auth.models import Permission, Group
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
-from .constants import apps_excluded_from_library_admin_group as excluded_app_labels
+from .constants import (
+    apps_excluded_from_library_admin_group as excluded_app_labels,
+    library_admin_group_name
+)
 
 
 def _get_types_and_group():
     return (
         ContentType.objects.filter(app_label__in=excluded_app_labels),
-        Group.objects.get(name__exact=settings.LIBRARY_ADMIN_GROUP_NAME)
+        Group.objects.get(name__exact=library_admin_group_name)
     )
 
 

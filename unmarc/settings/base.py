@@ -173,12 +173,3 @@ LOGGING = {
     },
     "root": {"level": "INFO", "handlers": ["console"]},
 }
-
-# Unmarc
-# --------------------------------------------------------------------\
-
-# LIBRARY_ADMIN_GROUP_NAME cannot be modified once written to DB
-# If needs to be changed, do so before running any migrations
-LIBRARY_ADMIN_GROUP_NAME = 'LibraryAdmin'
-
-# --------------------------------------------------------------------/

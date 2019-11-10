@@ -1,10 +1,12 @@
-from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import Group, Permission
 from django.test import TestCase
 
 from users.models import User, Staff
-from .constants import apps_excluded_from_library_admin_group as excluded_app_labels
+from .constants import (
+    apps_excluded_from_library_admin_group as excluded_app_labels,
+    library_admin_group_name
+)
 
 
 class UserModelTest(TestCase):
@@ -22,7 +24,7 @@ class UserModelTest(TestCase):
 
 class GroupTest(TestCase):
     def test_library_admin_group_exists(self):
-        self.assertTrue(Group.objects.filter(name__exact=settings.LIBRARY_ADMIN_GROUP_NAME).exists())
+        self.assertTrue(Group.objects.filter(name__exact=library_admin_group_name).exists())
 
 
 class SignalsTest(TestCase):
@@ -33,7 +35,7 @@ class SignalsTest(TestCase):
         cls.dummy_perm_name = 'Can foo bar'
         cls.perm_codename = 'bar_baz'
 
-        cls.lib_admin_grp = Group.objects.get(name=settings.LIBRARY_ADMIN_GROUP_NAME)
+        cls.lib_admin_grp = Group.objects.get(name=library_admin_group_name)
 
         cls.ct = ContentType.objects.create(
             app_label='dummy_test_app',

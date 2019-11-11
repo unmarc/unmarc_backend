@@ -1,5 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import Group, Permission
+from django.db import InternalError, transaction
 from django.test import TestCase
 
 from users.models import User, Staff
@@ -23,7 +24,14 @@ class UserModelTest(TestCase):
 
 
 class GroupTest(TestCase):
-    def test_library_admin_group_exists(self):
+    def test_1_library_admin_group_exists(self):
+        self.assertTrue(Group.objects.filter(name__exact=library_admin_group_name).exists())
+
+    def test_2_library_admin_group_cannot_be_deleted(self):
+        with self.assertRaises(Exception) as raised:
+            with transaction.atomic():
+                Group.objects.filter(name__exact=library_admin_group_name).delete()
+        self.assertEqual(InternalError, type(raised.exception))
         self.assertTrue(Group.objects.filter(name__exact=library_admin_group_name).exists())
 
 
@@ -61,7 +69,7 @@ class SignalsTest(TestCase):
         cls.excluded_perms = None
         ContentType.objects.filter(model__startswith=f'{cls.ct_model_prefix}').delete()
 
-    def test_auto_grant_permission_to_library_admin_group_works(self):
+    def test_1_auto_grant_permission_to_library_admin_group_works(self):
         Permission.objects.create(
             name=self.dummy_perm_name,
             content_type=self.ct,
@@ -75,7 +83,7 @@ class SignalsTest(TestCase):
             ).exists()
         )
 
-    def test_auto_grant_permission_to_library_admin_group_excludes_excluded_types(self):
+    def test_2_auto_grant_permission_to_library_admin_group_excludes_excluded_types(self):
         # First verify that newly created permissions from excluded apps exist
         self.assertEqual(len(self.excluded_perms), len(excluded_app_labels))
 
@@ -86,7 +94,7 @@ class SignalsTest(TestCase):
             ).exists()
         )
 
-    def test_auto_revoke_permission_of_library_admin_group_works(self):
+    def test_3_auto_revoke_permission_of_library_admin_group_works(self):
         perm = Permission.objects.create(
             name=self.dummy_perm_name,
             content_type=self.ct,

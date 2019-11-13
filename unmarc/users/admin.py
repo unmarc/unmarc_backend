@@ -17,9 +17,6 @@ from .adminforms import UserChangeForm, UserCreationForm
 from .models import User, Staff
 
 
-admin.site.register(Staff)
-
-
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     add_form_template = 'admin/auth/user/add_form.html'
@@ -187,3 +184,19 @@ class UserAdmin(admin.ModelAdmin):
             request.POST = request.POST.copy()
             request.POST['_continue'] = 1
         return super().response_add(request, obj, post_url_continue)
+
+
+@admin.register(Staff)
+class StaffAdmin(admin.ModelAdmin):
+    list_display = ('__str__', '_is_library_admin', '_branches')
+
+    def _is_library_admin(self, obj):
+        return obj.is_library_admin
+
+    _is_library_admin.boolean = True
+    _is_library_admin.short_description = 'Is Library Admin ?'
+
+    def _branches(self, obj):
+        return ', '.join([x.name for x in obj.branches.all()])
+
+    _branches.short_description = 'Branch'

@@ -6,6 +6,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from .constants import library_admin_group_name
+
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -111,3 +113,7 @@ class Staff(models.Model):
 
     def __str__(self):
         return self.user.name or self.user.username
+
+    @property
+    def is_library_admin(self):
+        return self.user.groups.filter(name=library_admin_group_name).exists()

@@ -25,7 +25,7 @@ class UserAdmin(admin.ModelAdmin):
         (None, {'fields': ('username', 'password')}),
         (_('Personal info'), {'fields': ('name', 'email')}),
         (_('Permissions'), {
-            'fields': ('is_active', 'is_superuser', 'groups', 'user_permissions'),
+            'fields': ('is_active', 'is_superuser', 'groups'),
         }),
         (_('Timestamps'), {'fields': ('last_login', 'date_joined')}),
     )

@@ -51,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             'unique': _("A user with that username already exists."),
         },
     )
-    name = models.CharField(_('name'), max_length=160, blank=True)
+    name = models.CharField(_('name'), max_length=160)
     email = models.EmailField(_('email address'), blank=True)
     is_active = models.BooleanField(
         _('active'),
@@ -74,7 +74,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _('users')
 
     def __str__(self):
-        return self.username + (f' ({self.name})' if self.name else '')
+        return self.name + f' || {self.username}'
 
     @property
     def is_staff(self):

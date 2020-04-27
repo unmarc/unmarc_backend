@@ -1,3 +1,6 @@
+# This project is no longer active. If you're interested in building a modern ILS that works for both low-resource (offline-first) and medium to large libraries, hit me up for a chat.
+
+
 [![buddy pipeline](https://app.buddy.works/unmarc/unmarc-backend/pipelines/pipeline/210672/badge.svg?token=8d2837bf6a9812bd0a082e1b0af6270726c44239b960f7e37f2b9796f26cb217 "buddy pipeline")](https://app.buddy.works/unmarc/unmarc-backend/pipelines/pipeline/210672)
 
 Project is in alpha stages. Proper documentation coming soon. For now...

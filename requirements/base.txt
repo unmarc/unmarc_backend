@@ -2,7 +2,7 @@ pytz==2019.2
 python-slugify==3.0.3 
 Pillow==6.2.0 
 argon2-cffi==19.1.0 
-redis==3.3.8 
+redis==4.5.3 
 
 # Django
 # -------------------------
